@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <vector>
 #include <iostream>
 
@@ -26,6 +26,7 @@ public:
 	SparseMatrix getTransposed();
 	SparseMatrix getTransposedV2();
 
+	void sortByRow();
 	bool operator==(const SparseMatrix &sm) const;
 	friend std::ostream & operator<<(std::ostream & os, SparseMatrix & mx);
 public:

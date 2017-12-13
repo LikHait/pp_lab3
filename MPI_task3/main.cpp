@@ -1,4 +1,4 @@
-#include "matrix.h"
+п»ї#include "matrix.h"
 #include "mpi.h"
 #include <iostream>
 using std::vector;
@@ -118,7 +118,7 @@ int main(int argc, char ** argv)
 	int ColToProcess = 0;
 	int l = 0, m = 0, n = 0;
 
-	//создание типа для передачи структуры Elem
+	//СЃРѕР·РґР°РЅРёРµ С‚РёРїР° РґР»СЏ РїРµСЂРµРґР°С‡Рё СЃС‚СЂСѓРєС‚СѓСЂС‹ Elem
 	Elem el;
 	MPI_Datatype ELEM_TYPE;
 	int block_lengths[2];
@@ -138,7 +138,7 @@ int main(int argc, char ** argv)
 	MPI_Type_struct(blocks_number, block_lengths, displacements, typelist, &ELEM_TYPE);
 	MPI_Type_commit(&ELEM_TYPE);
 
-	if (!ProcRank) //введенные размеры матриц
+	if (!ProcRank) //РІРІРµРґРµРЅРЅС‹Рµ СЂР°Р·РјРµСЂС‹ РјР°С‚СЂРёС†
 	{
 		if (argc > 1)
 		{
@@ -166,13 +166,13 @@ int main(int argc, char ** argv)
 
 	SparseMatrix tmatrix(std::move(matrix2.getTransposedV2()));
 	SparseMatrix res(l, n);
-	SparseMatrix resP(l, n); //результат для параллельной части
+	SparseMatrix resP(l, n); //СЂРµР·СѓР»СЊС‚Р°С‚ РґР»СЏ РїР°СЂР°Р»Р»РµР»СЊРЅРѕР№ С‡Р°СЃС‚Рё
 
-	int state = -1;			//номер ситуации
-	int rowA = 0;			//количество пересылаемых строк от матрицы matrix
-	int rowB = 0;			//количество пересылаемых строк от матрицы tmatrix
-	int recElemCountA = 0;	//количество получаемых элементов матрицы 1
-	int recElemCountB = 0;	//количество получаемых элементов матрицы 2
+	int state = -1;			//РЅРѕРјРµСЂ СЃРёС‚СѓР°С†РёРё
+	int rowA = 0;			//РєРѕР»РёС‡РµСЃС‚РІРѕ РїРµСЂРµСЃС‹Р»Р°РµРјС‹С… СЃС‚СЂРѕРє РѕС‚ РјР°С‚СЂРёС†С‹ matrix
+	int rowB = 0;			//РєРѕР»РёС‡РµСЃС‚РІРѕ РїРµСЂРµСЃС‹Р»Р°РµРјС‹С… СЃС‚СЂРѕРє РѕС‚ РјР°С‚СЂРёС†С‹ tmatrix
+	int recElemCountA = 0;	//РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕР»СѓС‡Р°РµРјС‹С… СЌР»РµРјРµРЅС‚РѕРІ РјР°С‚СЂРёС†С‹ 1
+	int recElemCountB = 0;	//РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕР»СѓС‡Р°РµРјС‹С… СЌР»РµРјРµРЅС‚РѕРІ РјР°С‚СЂРёС†С‹ 2
 
 	std::vector<int> linesToProcess;
 
@@ -202,14 +202,14 @@ int main(int argc, char ** argv)
 	std::vector<int> resRowVector;
 	std::vector<int> resColVector;
 
-	if (!ProcRank) //последовательная часть
+	if (!ProcRank) //РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅР°СЏ С‡Р°СЃС‚СЊ
 	{		
 		start = MPI_Wtime();
-		int disp1 = 0; //смещение для матрицы 1
+		int disp1 = 0; //СЃРјРµС‰РµРЅРёРµ РґР»СЏ РјР°С‚СЂРёС†С‹ 1
 		int matrixSize = matrix.v_row.size();
 		for (int row1 = 0; row1 < matrix._row; ++row1)
 		{
-			int disp2 = 0; //смещение для матрицы 2
+			int disp2 = 0; //СЃРјРµС‰РµРЅРёРµ РґР»СЏ РјР°С‚СЂРёС†С‹ 2
 			int tmatrixSize = tmatrix.v_row.size();
 			for (int row2 = 0; row2 < tmatrix._row; ++row2)
 			{
@@ -238,13 +238,13 @@ int main(int argc, char ** argv)
 		}
 		end = MPI_Wtime();
 
-		////матрица 1
+		////РјР°С‚СЂРёС†Р° 1
 		//cout << matrix.v_col.size() << endl; 
 		//cout << matrix << endl << endl;
-		////матрица 2
+		////РјР°С‚СЂРёС†Р° 2
 		//cout << matrix2.v_col.size() << endl;
 		//cout << matrix2 << endl << endl;
-		////результат умножения
+		////СЂРµР·СѓР»СЊС‚Р°С‚ СѓРјРЅРѕР¶РµРЅРёСЏ
 		//cout << res.v_col.size() << endl;
 		//cout << res << endl << endl;
 
@@ -253,11 +253,11 @@ int main(int argc, char ** argv)
 
 	
 
-	if (!ProcRank) //параллельная часть, используются сгенерированные и транспонированные ранее матрицы (matrix и tmatrix)
+	if (!ProcRank) //РїР°СЂР°Р»Р»РµР»СЊРЅР°СЏ С‡Р°СЃС‚СЊ, РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ СЃРіРµРЅРµСЂРёСЂРѕРІР°РЅРЅС‹Рµ Рё С‚СЂР°РЅСЃРїРѕРЅРёСЂРѕРІР°РЅРЅС‹Рµ СЂР°РЅРµРµ РјР°С‚СЂРёС†С‹ (matrix Рё tmatrix)
 	{
 		start2 = MPI_Wtime();
 
-		//ProcNum = 2; //отладка
+		//ProcNum = 2; //РѕС‚Р»Р°РґРєР°
 
 		linesToProcess.resize(ProcNum);
 
@@ -340,7 +340,7 @@ int main(int argc, char ** argv)
 		resCountFromProc.resize(ProcNum);
 		resOffsetFromProc.resize(ProcNum);
 
-		/*for (int i = 0; i < tmatrix.v_col.size(); ++i) //отладка
+		/*for (int i = 0; i < tmatrix.v_col.size(); ++i) //РѕС‚Р»Р°РґРєР°
 		{
 			cout << tmatrix.v_col[i];
 		}
@@ -359,11 +359,11 @@ int main(int argc, char ** argv)
 	}
 
 
-	MPI_Bcast(&col, 1, MPI_INT, 0, MPI_COMM_WORLD); //получение количества колонок
+	MPI_Bcast(&col, 1, MPI_INT, 0, MPI_COMM_WORLD); //РїРѕР»СѓС‡РµРЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° РєРѕР»РѕРЅРѕРє
 
 
 
-	//получение данных
+	//РїРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С…
 	MPI_Bcast(&state, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 	switch (state)
@@ -460,14 +460,14 @@ int main(int argc, char ** argv)
 	default:
 		break;
 	}
-	//конец получения данных
+	//РєРѕРЅРµС† РїРѕР»СѓС‡РµРЅРёСЏ РґР°РЅРЅС‹С…
 
-	//подсчет данных
-	int disp1 = 0; //смещение для матрицы 1
+	//РїРѕРґСЃС‡РµС‚ РґР°РЅРЅС‹С…
+	int disp1 = 0; //СЃРјРµС‰РµРЅРёРµ РґР»СЏ РјР°С‚СЂРёС†С‹ 1
 	int matrixSize = recElemCountA;
 	for (int row1 = rowStorageA[0]; row1 <= rowStorageA[rowStorageA.size() - 1]; ++row1)
 	{
-		int disp2 = 0; //смещение для матрицы 2
+		int disp2 = 0; //СЃРјРµС‰РµРЅРёРµ РґР»СЏ РјР°С‚СЂРёС†С‹ 2
 		int tmatrixSize = recElemCountB;
 		for (int row2 = rowStorageB[0]; row2 <= rowStorageB[rowStorageB.size() - 1]; ++row2) 
 		{
@@ -496,7 +496,7 @@ int main(int argc, char ** argv)
 	}
 
 	int sendVectorSize = elemPRes.size();
-	//подсчет данных
+	//РїРѕРґСЃС‡РµС‚ РґР°РЅРЅС‹С…
 
 	MPI_Gather(&sendVectorSize, 1, MPI_INT, resCountFromProc.data(), 1, MPI_INT, 0, MPI_COMM_WORLD);
 
@@ -525,6 +525,8 @@ int main(int argc, char ** argv)
 		resP.v_row = resRowVector;
 		resP.v_col = resColVector;
 		cout << "Number of processes = " << ProcNum << endl;
+		if (state == 1 || state == 3)
+			resP.sortByRow();
 		cout << "Matrixes are " << ((resP == res) ? "match" : "different") << endl;
 	}
 

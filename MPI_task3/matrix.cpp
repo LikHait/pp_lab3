@@ -1,4 +1,4 @@
-#include "matrix.h"
+п»ї#include "matrix.h"
 #include <random>
 #include "mpi.h"
 
@@ -64,7 +64,7 @@ void SparseMatrix::genMatrix(int den)
 		{
 			if (dist(gen) < den)
 			{
-				Elem el(dast(gen), 0); // dast(gen));
+				Elem el(dast(gen), dast(gen));
 				v_elem.emplace_back(el);
 				v_row.emplace_back(i);
 				v_col.emplace_back(j);
@@ -86,7 +86,7 @@ SparseMatrix SparseMatrix::getTransposed()
 	return tmp;
 }
 
-SparseMatrix SparseMatrix::getTransposedV2() //для больших размеров матриц
+SparseMatrix SparseMatrix::getTransposedV2() //РґР»СЏ Р±РѕР»СЊС€РёС… СЂР°Р·РјРµСЂРѕРІ РјР°С‚СЂРёС†
 {
 	SparseMatrix tmp(_col, _row);
 	std::vector<std::vector<int>> v1(_col);
@@ -107,6 +107,30 @@ SparseMatrix SparseMatrix::getTransposedV2() //для больших размеров матриц
 		tmpSize += v1[i].size();
 	}
 	return tmp;
+}
+
+void SparseMatrix::sortByRow()
+{
+	std::vector<std::vector<Elem>> tmpEl(this->_row);
+	std::vector<std::vector<int>> tmpCol(this->_row);
+
+	size_t size = this->v_elem.size();
+	for (int i = 0; i < size; ++i)
+	{
+		tmpEl[this->v_row[i]].emplace_back(this->v_elem[i]);
+		tmpCol[this->v_row[i]].emplace_back(this->v_col[i]);
+	}
+	size = this->_row;
+	int tmpSize = 0;
+	this->v_elem.resize(0);
+	this->v_col.resize(0);
+	for (int i = 0; i < size; ++i)
+	{
+		this->v_col.insert(this->v_col.end(), tmpCol[i].begin(), tmpCol[i].end());
+		this->v_elem.insert(this->v_elem.end(), tmpEl[i].begin(), tmpEl[i].end());
+		std::fill(this->v_row.begin() + tmpSize, this->v_row.begin() + tmpSize + tmpEl[i].size(), i);
+		tmpSize += tmpEl[i].size();
+	}
 }
 
 bool SparseMatrix::operator==(const SparseMatrix & sm) const
