@@ -520,6 +520,7 @@ int main(int argc, char ** argv)
 	{
 		end2 = MPI_Wtime();
 		cout << "Parallel time   = " << end2 - start2 << endl;
+		cout << "Acceleration    = " << (end - start) / (end2 - start2) << endl;
 		resP.v_elem = resElemVector;
 		resP.v_row = resRowVector;
 		resP.v_col = resColVector;
