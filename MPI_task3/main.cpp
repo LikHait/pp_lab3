@@ -116,7 +116,9 @@ int main(int argc, char ** argv)
 	int OpToProcess = 0;
 	int RowToProcess = 0;
 	int ColToProcess = 0;
-	int l = 0, m = 0, n = 0;
+	int l = 10, m = 10, n = 10;
+	int densityA = 30; 
+	int densityB = 30;
 
 	//создание типа для передачи структуры Elem
 	Elem el;
@@ -145,12 +147,14 @@ int main(int argc, char ** argv)
 			l = atoi(argv[1]);
 			m = atoi(argv[2]);
 			n = atoi(argv[3]);
+			densityA = atoi(argv[4]);
+			densityB = atoi(argv[5]);
 		}
 		else
 			std::cin >> l >> m >> n;
 
-		cout << "Matrix A : " << "row = " << l << ", col = " << m << endl;
-		cout << "Matrix B : " << "row = " << m << ", col = " << n << endl;
+		cout << "Matrix A : " << "row = " << l << ", col = " << m << ", density = " << densityA << endl;
+		cout << "Matrix B : " << "row = " << m << ", col = " << n << ", density = " << densityB << endl;
 	}
 
 	SparseMatrix matrix(l, m);
@@ -160,8 +164,8 @@ int main(int argc, char ** argv)
 
 	if (!ProcRank)
 	{
-		matrix.genMatrix(30);
-		matrix2.genMatrix(30);
+		matrix.genMatrix(densityA);
+		matrix2.genMatrix(densityB);
 	}
 
 	SparseMatrix tmatrix(std::move(matrix2.getTransposedV2()));
